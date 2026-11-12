@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hub communautaire Wakfu : tous les add-ons, guides, builders et ressources indispensables pour jouer et progresser efficacement.">
     <title>Hub Wakfu - Outils & Add-ons</title>
-    
+
     <!-- Balises pour l'aperçu Discord -->
     <meta property="og:title" content="⚡ Boîte à Outils Wakfu — Hub Communautaire">
     <meta property="og:description" content="Retrouvez tous les add-ons (Wakfu Companion, Gelutin, Chachastuce), guides, builders de donjons et tableau des jetons au même endroit.">
@@ -20,6 +21,8 @@
             --text-muted: #94a3b8;
             --accent-color: #00d2ff;
             --accent-gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --shadow-soft: 0 10px 30px -10px rgba(0, 210, 255, 0.2);
+            --radius: 16px;
         }
 
         * {
@@ -29,19 +32,26 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--bg-color);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.08) 0%, transparent 40%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
             padding: 20px;
+        }
+
+        a {
+            color: inherit;
         }
 
         .container {
@@ -59,12 +69,13 @@
         }
 
         header h1 {
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 2vw, 2.2rem);
             font-weight: 800;
             letter-spacing: 1px;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
             margin-bottom: 6px;
         }
 
@@ -73,24 +84,23 @@
             font-size: 0.95rem;
         }
 
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+        main {
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .grid-2x2 {
-                grid-template-columns: 1fr;
-            }
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            width: 100%;
         }
 
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
+            border-radius: var(--radius);
             padding: 22px;
             display: flex;
             flex-direction: column;
@@ -98,12 +108,22 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.5), transparent);
         }
 
         .card:hover {
             border-color: var(--card-border-hover);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.2);
+            box-shadow: 0 16px 32px -18px rgba(0, 210, 255, 0.35);
         }
 
         .card-header {
@@ -134,7 +154,7 @@
         .card-desc {
             font-size: 0.88rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.5;
             flex-grow: 1;
         }
 
@@ -144,10 +164,16 @@
             gap: 8px;
         }
 
+        .btn-link,
+        .thumb {
+            transition: all 0.2s ease;
+        }
+
         .btn-link {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 10px 14px;
@@ -156,7 +182,6 @@
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.2s ease;
         }
 
         .btn-link:hover {
@@ -168,31 +193,34 @@
 
         .preview-thumbs {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 8px;
         }
 
         .thumb {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px;
             padding: 8px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             text-decoration: none;
             color: var(--text-main);
-            transition: 0.2s;
+            min-height: 82px;
         }
 
         .thumb:hover {
             border-color: var(--accent-color);
             background: rgba(0, 210, 255, 0.05);
+            transform: translateY(-2px);
         }
 
-        .thumb img, .thumb svg {
+        .thumb img,
+        .thumb svg {
             width: 32px;
             height: 32px;
             object-fit: contain;
@@ -208,100 +236,126 @@
             width: 100%;
         }
 
+        .btn-link:focus-visible,
+        .thumb:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 3px;
+        }
+
         footer {
             margin-top: 10px;
             font-size: 0.75rem;
             color: var(--text-muted);
             letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+
+            .grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .preview-thumbs {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header>
             <h1>⚡ HUB WAKFU COMMUNAUTAIRE</h1>
             <p>Tous les outils, add-ons et guides indispensables pour le multicompte</p>
         </header>
 
-        <div class="grid-2x2">
-            <!-- CARTE 1 : ADD-ONS -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">🛠️</div>
-                    <div class="card-title">Add-ons Essentiels</div>
-                </div>
-                <div class="card-desc">Outils indispensables pour le confort de jeu et l'optimisation multicompte.</div>
-                <div class="preview-thumbs">
-                    <a href="https://wakfu-companion.com/fr" target="_blank" class="thumb">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        <span>Companion</span>
-                    </a>
-                    <a href="https://github.com/Kabaal06/Gelutin/releases" target="_blank" class="thumb">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
-                        <span>Gelutin</span>
-                    </a>
-                    <a href="https://chachastuce.fr/" target="_blank" class="thumb">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        <span>Chachastuce</span>
-                    </a>
-                </div>
-            </div>
+        <main>
+            <div class="grid-2x2">
+                <!-- CARTE 1 : ADD-ONS -->
+                <section class="card" aria-labelledby="addons-title">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">🛠️</div>
+                        <h2 id="addons-title" class="card-title">Add-ons Essentiels</h2>
+                    </div>
+                    <p class="card-desc">Outils indispensables pour le confort de jeu et l'optimisation multicompte.</p>
+                    <div class="preview-thumbs">
+                        <a href="https://wakfu-companion.com/fr" target="_blank" rel="noopener noreferrer" class="thumb" aria-label="Ouvrir Wakfu Companion dans un nouvel onglet">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            <span>Companion</span>
+                        </a>
+                        <a href="https://github.com/Kabaal06/Gelutin/releases" target="_blank" rel="noopener noreferrer" class="thumb" aria-label="Ouvrir Gelutin dans un nouvel onglet">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+                            <span>Gelutin</span>
+                        </a>
+                        <a href="https://chachastuce.fr/" target="_blank" rel="noopener noreferrer" class="thumb" aria-label="Ouvrir Chachastuce dans un nouvel onglet">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l2.7 5.47L20 8.2l-4.5 4.38 1.06 6.17L12 0l-4.56 0 1.06-6.17L4 8.2l5.3-.73L12 2z"/><path d="M12 8.5l1.3 2.63 2.9.42-2.1 2.04.5 2.87-2.6-1.37-2.6 1.37.5-2.87-2.1-2.04 2.9-.42L12 8.5z"/></svg>
+                            <span>Chachastuce</span>
+                        </a>
+                    </div>
+                </section>
 
-            <!-- CARTE 2 : GUIDES & INFOS -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">📖</div>
-                    <div class="card-title">Guides & Infos du Jeu</div>
-                </div>
-                <div class="card-desc">Base de connaissance officielle et astuces pour progresser efficacement.</div>
-                <div class="links-stack">
-                    <a href="https://wakfu.guide/" target="_blank" class="btn-link">
-                        <span>Wakfu Guide (encyclopédie)</span>
-                        <span>→</span>
-                    </a>
-                </div>
-            </div>
+                <!-- CARTE 2 : GUIDES & INFOS -->
+                <section class="card" aria-labelledby="guides-title">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">📖</div>
+                        <h2 id="guides-title" class="card-title">Guides & Infos du Jeu</h2>
+                    </div>
+                    <p class="card-desc">Base de connaissance officielle et astuces pour progresser efficacement.</p>
+                    <div class="links-stack">
+                        <a href="https://wakfu.guide/" target="_blank" rel="noopener noreferrer" class="btn-link" aria-label="Ouvrir Wakfu Guide dans un nouvel onglet">
+                            <span>Wakfu Guide (encyclopédie)</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
 
-            <!-- CARTE 3 : BUILDS & DONJONS -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">⚔️</div>
-                    <div class="card-title">Builds & Stratégies Donjons</div>
-                </div>
-                <div class="card-desc">Optimisez vos stuffs et découvrez les tactiques de boss.</div>
-                <div class="links-stack">
-                    <a href="https://wak-lab.com/WakLab.dc" target="_blank" class="btn-link">
-                        <span>Wak-Lab (Builder & Outils)</span>
-                        <span>→</span>
-                    </a>
-                    <a href="https://wakfuli.com/" target="_blank" class="btn-link">
-                        <span>Wakfuli (Stratégies Donjons)</span>
-                        <span>→</span>
-                    </a>
-                </div>
-            </div>
+                <!-- CARTE 3 : BUILDS & DONJONS -->
+                <section class="card" aria-labelledby="builds-title">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">⚔️</div>
+                        <h2 id="builds-title" class="card-title">Builds & Stratégies Donjons</h2>
+                    </div>
+                    <p class="card-desc">Optimisez vos stuffs et découvrez les tactiques de boss.</p>
+                    <div class="links-stack">
+                        <a href="https://wak-lab.com/WakLab.dc" target="_blank" rel="noopener noreferrer" class="btn-link" aria-label="Ouvrir Wak-Lab dans un nouvel onglet">
+                            <span>Wak-Lab (Builder & Outils)</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                        <a href="https://wakfuli.com/" target="_blank" rel="noopener noreferrer" class="btn-link" aria-label="Ouvrir Wakfuli dans un nouvel onglet">
+                            <span>Wakfuli (Stratégies Donjons)</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
+                </section>
 
-            <!-- CARTE 4 : RESSOURCES -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">📊</div>
-                    <div class="card-title">Ressources & Jetons</div>
-                </div>
-                <div class="card-desc">Tableau récapitulatif complet de tous les jetons et croupiers du jeu.</div>
-                <div class="links-stack">
-                    <a href="https://docs.google.com/spreadsheets/u/0/d/1iMIN1JCT-Btu34V90X5tsvlu3Uf348yMQDD65vurRzg/htmlview?pli=1#gid=0" target="_blank" class="btn-link">
-                        <span>Tableau Google Sheets Jetons</span>
-                        <span>📄</span>
-                    </a>
-                </div>
+                <!-- CARTE 4 : RESSOURCES -->
+                <section class="card" aria-labelledby="resources-title">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">📊</div>
+                        <h2 id="resources-title" class="card-title">Ressources & Jetons</h2>
+                    </div>
+                    <p class="card-desc">Tableau récapitulatif complet de tous les jetons et croupiers du jeu.</p>
+                    <div class="links-stack">
+                        <a href="https://docs.google.com/spreadsheets/u/0/d/1iMIN1JCT-Btu34V90X5tsvlu3Uf348yMQDD65vurRzg/htmlview?pli=1#gid=0" target="_blank" rel="noopener noreferrer" class="btn-link" aria-label="Ouvrir le tableau des jetons Wakfu dans un nouvel onglet">
+                            <span>Tableau Google Sheets Jetons</span>
+                            <span aria-hidden="true">📄</span>
+                        </a>
+                    </div>
+                </section>
             </div>
-        </div>
+        </main>
 
         <footer>
             Hub communautaire Wakfu — Mis à jour et optimisé
         </footer>
     </div>
-
 </body>
 </html>
